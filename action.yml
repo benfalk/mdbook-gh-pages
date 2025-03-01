@@ -1,0 +1,23 @@
+name: mdBook gh-pages
+description: Builds and Uploads an mdBook for Github Pages
+runs:
+  using: composite
+  steps:
+    - name: Prepare for Install
+      shell: bash
+      run: |
+        mkdir -p $HOME/.local/bin
+        echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+        curl --proto '=https' \
+          --tlsv1.2 -sSf \
+          https://raw.githubusercontent.com/devmatteini/dra/refs/heads/main/install.sh \
+          | bash -s -- --to $HOME/.local/bin
+
+    - name: Install mdBook & Plugins
+      shell: bash
+      run: |
+        dra download -a -i -o $HOME/.local/bin/ rust-lang/mdBook
+        dra download -a -i -o $HOME/.local/bin/ badboy/mdbook-mermaid
+        dra download -a -i -o $HOME/.local/bin/ benfalk/mdbook-journal
+        dra download -a -i -o $HOME/.local/bin/ benfalk/anchors-aweigh
+        dra download -a -i -o $HOME/.local/bin/ tommilligan/mdbook-admonish
